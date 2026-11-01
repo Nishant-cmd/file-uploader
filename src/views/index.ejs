@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Uploader</title>
-</head>
-<body>
-    <h1>File Uploader</h1>
-</body>
+  </head>
+  <body>
+    <%- include('nav/nav') %>
+
+    <main>
+      <section aria-labelledby="main-heading">
+        <h1 id="main-heading">Your Files, Securely Stored. Always Within Reach.</h1>
+
+        <p>
+          Upload, organize, and access your important files from anywhere. Keep everything safe, simple, and accessible.
+        </p>
+
+        <nav aria-label="Account actions">
+          <a href="/sign-up">Get Started</a>
+          <a href="/login">Log In</a>
+        </nav>
+      </section>
+
+      <section aria-label="File storage features">
+        <article>
+          <!-- <span aria-hidden="true"></span> -->
+          <h2>Private & Secure</h2>
+          <p>Your files stay protected with secure storage and reliable data protection.</p>
+        </article>
+
+        <article>
+          <!-- <span aria-hidden="true"></span> -->
+          <h2>Effortless File Uploads</h2>
+          <p>Upload your documents, images, and other files quickly.</p>
+        </article>
+
+        <article>
+          <!-- <span aria-hidden="true"></span> -->
+          <h2>Access Anytime, Anywhere</h2>
+          <p>Access your stored files whenever you need them, from any device with an internet connection.</p>
+        </article>
+      </section>
+    </main>
+  </body>
 </html>
