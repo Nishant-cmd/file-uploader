@@ -1,28 +1,30 @@
+import { User } from '../generated/prisma/client';
 import { prisma } from '../lib/prisma';
 
-async function main(): Promise<void> {
-  const user = await prisma.user.create({
+async function createUser(username: string, email: string, password: string): Promise<void> {
+  await prisma.user.create({
     data: {
-      username: 'johnDoe',
-      email: 'johDoe@example.com',
-      password: 'johnDoe123',
+      username,
+      email,
+      password,
     },
   });
-  console.log('Created user:', user);
-
-  const allUsers = await prisma.user.findMany({
-    where: {
-      email: 'johnDoe@example.com',
-    },
-  });
-  console.log('All user:', allUsers);
 }
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
+
+async function getUser(username: string): Promise<User | null> {
+  return await prisma.user.findUnique({
+    where: {
+      username,
+    },
   });
+}
+
+async function getUserById(userId: number): Promise<User | null> {
+  return await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+}
+
+export { createUser, getUser, getUserById };
