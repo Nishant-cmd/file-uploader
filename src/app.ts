@@ -1,7 +1,10 @@
 import path from 'node:path';
 import express from 'express';
 import index from './routes/index';
-import session from 'express-session';
+import expressSession from 'express-session';
+import 'dotenv/config';
+import { prisma } from './lib/prisma';
+import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import authRouter from './routes/auth/authRouter';
 import passport from 'passport';
 import dashboardRouter from './routes/dashboard/dashboardRouter';
@@ -21,14 +24,18 @@ app.use(express.static(assetsPath));
 
 // Create & load the session
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'development-only-secret',
+  expressSession({
+    secret: process.env.SESSION_SECRET!,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
     },
+    store: new PrismaSessionStore(prisma as any, {
+      checkPeriod: 2 * 60 * 1000,
+      dbRecordIdIsSessionId: true,
+    }),
   }),
 );
 

@@ -1,4 +1,4 @@
-import { User as PrismaUser } from '../generated/prisma/client';
+import { User as PrismaUser } from '../../generated/prisma/client';
 import 'express-session';
 
 declare global {
