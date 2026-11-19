@@ -2,6 +2,8 @@
 
 A file drive built with Express, EJS, Prisma, PostgreSQL, and Supabase Storage.
 
+**Live app:** [file-uploader-11gj.onrender.com](https://file-uploader-11gj.onrender.com/)
+
 ## Features
 
 - User sign-up and login
