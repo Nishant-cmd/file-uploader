@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= currentFolder.name %></title>
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/drive.css" />
+  </head>
+  <body>
+    <nav class="topbar">
+      <a href="/dashboard">My Drive</a>
+      <% breadcrumbs.forEach(function(crumb) { %>
+        &nbsp;/&nbsp;<a href="/dashboard/folder/<%= crumb.id %>"><%= crumb.name %></a>
+      <% }); %>
+      &nbsp;/&nbsp;<strong><%= currentFolder.name %></strong>
+      &nbsp;|&nbsp;
+      <a href="/dashboard/log-out">Log Out</a>
+    </nav>
+
+    <main class="container"><h2>📁 <%= currentFolder.name %></h2>
+    <section class="actions">
+      <form action="/dashboard/folder/<%= currentFolder.id %>/rename" method="POST"><input type="text" name="folderName" maxlength="100" placeholder="Rename folder" required /><button>Rename</button></form>
+      <form action="/dashboard/folder/<%= currentFolder.id %>/share" method="POST"><label>Share for <select name="days"><option value="1">1 day</option><option value="10">10 days</option><option value="30">30 days</option></select></label><button>Create share link</button></form>
+      <form action="/dashboard/folder/<%= currentFolder.id %>/delete" method="POST" onsubmit="return confirm('Delete this folder and all its contents?')"><button class="danger">Delete folder</button></form>
+    </section>
+
+    <form action="/dashboard/create-folder" method="POST">
+      <input type="hidden" name="parentFolderId" value="<%= currentFolder.id %>" />
+      <input type="text" name="folderName" placeholder="New sub-folder name" required />
+      <button type="submit">Create Sub-Folder</button>
+    </form>
+
+    <h3>Folders</h3>
+    <% if (folders.length === 0) { %>
+      <p>No sub-folders.</p>
+    <% } else { %>
+      <ul class="items">
+        <% folders.forEach(function(folder) { %>
+          <li>
+            📁 <a href="/dashboard/folder/<%= folder.id %>"><%= folder.name %></a>
+            <form class="inline" action="/dashboard/folder/<%= folder.id %>/delete" method="POST" onsubmit="return confirm('Delete this folder and all its contents?')"><button class="danger">Delete</button></form>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <h3>Files</h3>
+    <% if (files.length === 0) { %>
+      <p>No files yet.</p>
+    <% } else { %>
+      <ul class="items">
+        <% files.forEach(function(file) { %>
+          <li>
+            📄 <a href="/dashboard/file/<%= file.id %>"><%= file.name %></a>
+            &nbsp;(<%= (file.size / 1024).toFixed(1) %> KB)
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <hr />
+
+    <h3>Upload file here</h3>
+    <form action="/dashboard/upload" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="folderId" value="<%= currentFolder.id %>" />
+      <input type="file" name="uploadFile" accept=".jpg,.jpeg,.png,.pdf" required />
+      <button type="submit">Upload</button>
+    </form><p class="muted">JPEG, PNG, or PDF · up to 10 MB</p></main>
+  </body>
+</html>

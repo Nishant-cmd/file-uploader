@@ -2,7 +2,7 @@ import passport from '../config/passport';
 import { Request, Response, NextFunction } from 'express';
 
 const validateLogin = passport.authenticate('local', {
-  successRedirect: '/dashboard/dashboard',
+  successRedirect: '/dashboard',
   failureRedirect: '/auth/log-in',
   failureMessage: true,
 });

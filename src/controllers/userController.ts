@@ -19,7 +19,7 @@ export default async function registerUser(req: Request, res: Response, next: Ne
 
     await createUser(username, email, hashedPassword);
 
-    return res.status(201).redirect('auth_view/login');
+    return res.status(201).redirect('/auth/log-in');
   } catch (err) {
     next(err);
   }

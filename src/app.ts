@@ -8,21 +8,18 @@ import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import authRouter from './routes/auth/authRouter';
 import passport from 'passport';
 import dashboardRouter from './routes/dashboard/dashboardRouter';
+import errorHandler from './middlewares/errorHandler';
 
 const app = express();
 
-//Configure views
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-//Parse incoming request bodies
 app.use(express.urlencoded({ extended: true }));
 
-//Serve static assets
-const assetsPath = path.join(__dirname, 'public');
+const assetsPath = path.join(__dirname, '../public');
 app.use(express.static(assetsPath));
 
-// Create & load the session
 app.use(
   expressSession({
     secret: process.env.SESSION_SECRET!,
@@ -31,6 +28,8 @@ app.use(
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
     },
     store: new PrismaSessionStore(prisma as any, {
       checkPeriod: 2 * 60 * 1000,
@@ -39,13 +38,12 @@ app.use(
   }),
 );
 
-//Initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-//Routes
-app.get('/', index);
+app.use('/', index);
 app.use('/auth', authRouter);
 app.use('/dashboard', dashboardRouter);
+app.use(errorHandler);
 
 export default app;

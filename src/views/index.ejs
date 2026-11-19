@@ -4,39 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Uploader</title>
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/landing.css" />
   </head>
   <body>
     <%- include('nav/nav') %>
 
-    <main>
-      <section aria-labelledby="main-heading">
+    <main class="landing">
+      <section class="hero" aria-labelledby="main-heading">
+        <p class="eyebrow">YOUR PERSONAL FILE SPACE</p>
         <h1 id="main-heading">Your Files, Securely Stored. Always Within Reach.</h1>
 
         <p>
           Upload, organize, and access your important files from anywhere. Keep everything safe, simple, and accessible.
         </p>
 
-        <nav aria-label="Account actions">
-          <a href="/auth/sign-up">Get Started</a>
-          <a href="/auth/log-in">Log In</a>
+        <nav class="hero-actions" aria-label="Account actions">
+          <a class="button" href="/auth/sign-up">Get Started</a>
+          <a class="button button-secondary" href="/auth/log-in">Log In</a>
         </nav>
       </section>
 
-      <section aria-label="File storage features">
+      <section class="features" aria-label="File storage features">
         <article>
-          <!-- <span aria-hidden="true"></span> -->
           <h2>Private & Secure</h2>
           <p>Your files stay protected with secure storage and reliable data protection.</p>
         </article>
 
         <article>
-          <!-- <span aria-hidden="true"></span> -->
           <h2>Effortless File Uploads</h2>
           <p>Upload your documents, images, and other files quickly.</p>
         </article>
 
         <article>
-          <!-- <span aria-hidden="true"></span> -->
           <h2>Access Anytime, Anywhere</h2>
           <p>Access your stored files whenever you need them, from any device with an internet connection.</p>
         </article>

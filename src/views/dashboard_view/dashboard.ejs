@@ -1,2 +1,94 @@
-<p>Welcome to your dashboard!</p>
-<a href="/dashboard/log-out">Log Out</a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Drive | File Uploader</title>
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+  </head>
+  <body>
+    <nav class="topbar dashboard-topbar">
+      <strong><a class="brand" href="/dashboard">File Uploader</a></strong>
+      <span class="current-location">My Drive</span>
+      <a class="sign-out" href="/dashboard/log-out">Log Out</a>
+    </nav>
+
+    <main class="container dashboard-container">
+      <header class="dashboard-heading">
+        <div>
+          <p class="dashboard-eyebrow">YOUR PERSONAL SPACE</p>
+          <h1>My Drive</h1>
+          <p class="muted">Keep your files organized and easy to find.</p>
+        </div>
+        <span class="drive-count"><%= folders.length %> folders · <%= files.length %> files</span>
+      </header>
+
+      <section class="dashboard-section" aria-labelledby="folders-heading">
+        <div class="section-heading">
+          <div>
+            <h2 id="folders-heading">Folders</h2>
+            <p class="muted">Create a folder to organize related files.</p>
+          </div>
+        </div>
+
+        <form class="dashboard-create-form" action="/dashboard/create-folder" method="POST">
+          <input type="text" name="folderName" placeholder="Name your new folder" maxlength="100" required />
+          <button type="submit">Create folder</button>
+        </form>
+
+        <% if (folders.length === 0) { %>
+          <p class="empty-state">No folders yet. Create one above to get started.</p>
+        <% } else { %>
+          <ul class="folder-grid">
+            <% folders.forEach(function(folder) { %>
+              <li class="folder-card">
+                <a class="folder-link" href="/dashboard/folder/<%= folder.id %>">
+                  <span class="folder-icon" aria-hidden="true">📁</span>
+                  <span class="folder-name"><%= folder.name %></span>
+                </a>
+                <form class="folder-delete-form" action="/dashboard/folder/<%= folder.id %>/delete" method="POST" onsubmit="return confirm('Delete this folder and all its contents?')">
+                  <button class="danger" type="submit" aria-label="Delete <%= folder.name %>">Delete</button>
+                </form>
+              </li>
+            <% }); %>
+          </ul>
+        <% } %>
+      </section>
+
+      <section class="dashboard-section" aria-labelledby="files-heading">
+        <div class="section-heading">
+          <div>
+            <h2 id="files-heading">Files in My Drive</h2>
+            <p class="muted">Files that are not inside a folder.</p>
+          </div>
+        </div>
+
+        <% if (files.length === 0) { %>
+          <p class="empty-state">No files in My Drive yet.</p>
+        <% } else { %>
+          <ul class="dashboard-file-list">
+            <% files.forEach(function(file) { %>
+              <li class="dashboard-file-row">
+                <span class="file-icon" aria-hidden="true">📄</span>
+                <a href="/dashboard/file/<%= file.id %>"><%= file.name %></a>
+                <span class="file-size"><%= (file.size / 1024).toFixed(1) %> KB</span>
+              </li>
+            <% }); %>
+          </ul>
+        <% } %>
+      </section>
+
+      <section class="upload-panel" aria-labelledby="upload-heading">
+        <div>
+          <h2 id="upload-heading">Upload to My Drive</h2>
+          <p class="muted">JPEG, PNG, or PDF · up to 10 MB</p>
+        </div>
+        <form class="dashboard-upload-form" action="/dashboard/upload" method="POST" enctype="multipart/form-data">
+          <input type="file" name="uploadFile" accept=".jpg,.jpeg,.png,.pdf" required />
+          <button type="submit">Upload file</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
