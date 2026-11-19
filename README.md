@@ -1,25 +1,41 @@
 # File Uploader
 
-A small file drive built with Express, EJS, Prisma, PostgreSQL, and Supabase Storage.
+A file drive built with Express, EJS, Prisma, PostgreSQL, and Supabase Storage.
 
 ## Features
 
-- Sign up and log in, with per-user file and folder access.
-- Create nested folders, rename them, or delete a folder and its contents.
-- Upload JPEG, PNG, and PDF files up to 10 MB to a private Supabase Storage bucket.
-- Browse file metadata and download files.
-- Create public, read-only folder links that expire after 1, 10, or 30 days.
+- User sign-up and login
+- Nested folders with create, rename, and delete actions
+- JPEG, PNG, and PDF uploads up to 10 MB
+- File details and downloads
+- Expiring public folder share links
 
 ## Local setup
 
-Use Node.js 20 or newer and a Supabase project. Supabase hosts both this app's PostgreSQL database and its file storage. `DATABASE_URL` is the PostgreSQL connection string used by the running app. `DIRECT_URL` is used by Prisma migrations. Copy both from your project's **Connect** panel, and replace any password placeholder with your database password. The app also uses `SUPABASE_URL` and `SUPABASE_SECRET_KEY` to call the separate Storage API.
+### 1. Install the requirements
 
-Create a **private** Storage bucket named `files` (or choose a different name in `SUPABASE_STORAGE_BUCKET`). Set its maximum file size to 10 MB and allowed MIME types to `image/jpeg`, `image/png`, and `application/pdf`. Add a `.env` file:
+Use Node.js 20 or newer and create a [Supabase project](https://supabase.com/).
+
+### 2. Create a Storage bucket
+
+In Supabase, open **Storage** and create a **private** bucket named `files`.
+
+Set the file limit to 10 MB. Allow `image/jpeg`, `image/png`, and `application/pdf`.
+
+### 3. Get your Supabase settings
+
+From the project dashboard, copy the project URL and a server-side secret key.
+
+Open **Connect** to get the PostgreSQL connection strings. Set `DATABASE_URL` for the app and `DIRECT_URL` for Prisma migrations.
+
+### 4. Create your `.env` file
+
+Add these values in the project root. Replace each placeholder with your Supabase settings and a long random session secret.
 
 ```dotenv
 DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require"
 DIRECT_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require"
-SESSION_SECRET="a-long-random-secret-value"
+SESSION_SECRET="replace-with-a-long-random-secret"
 PORT=3000
 NODE_ENV=development
 SUPABASE_URL="https://your-project-ref.supabase.co"
@@ -27,27 +43,19 @@ SUPABASE_SECRET_KEY="your-server-side-secret-key"
 SUPABASE_STORAGE_BUCKET="files"
 ```
 
-Then install dependencies, apply the migrations, and start the app:
+Use the connection type that works from your network. Direct connections require IPv6 unless your project has IPv4 enabled. Use the Supabase session pooler on IPv4-only networks.
+
+### 5. Install dependencies and set up the database
 
 ```sh
 npm install
 npm run db:deploy
+```
+
+### 6. Start the development server
+
+```sh
 npm run dev
 ```
 
-Open `http://localhost:3000`. `npm run build` generates the Prisma client, compiles TypeScript, and copies the EJS views and public assets into the build. Run the production build with `npm start`.
-
-## Deployment
-
-Provision a Supabase project and private Storage bucket, set all environment variables above in the host, and use:
-
-```sh
-npm install
-npm run db:deploy
-npm run build
-npm start
-```
-
-Choose a database connection string that the deployment host can reach. Supabase recommends a direct connection for persistent backends when the host supports IPv6, or the session pooler for IPv4-only hosts. Set `NODE_ENV=production` to enable secure session cookies. Never expose the Supabase secret/service role key in browser code or commit it to source control. Files stay in a private bucket; the app creates short-lived signed download URLs after checking file ownership or the folder share expiry. Anyone with a folder share link can download its contents until the selected expiry.
-
-Uploads are limited by extension and MIME type to JPEG, PNG, and PDF, with a 10 MB maximum. Add further types only after deciding how they should be stored and served.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
