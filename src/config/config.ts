@@ -1,7 +1,4 @@
-import path from 'node:path';
-import { loadEnvFile } from 'node:process';
-
-loadEnvFile(path.join(__dirname, '../../.env'));
+import 'dotenv/config';
 
 interface Config {
   port: number;
